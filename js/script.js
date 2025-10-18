@@ -30,6 +30,7 @@ function addTask() {
   const newTask = {
     task: taskInput.value.trim(),
     date: taskDate.value,
+    status: 'Pending' // new: default status
   };
 
   tasksDb.push(newTask);
@@ -62,7 +63,13 @@ function renderTasks() {
       <tr data-index="${index}">
         <td>${escapeHtml(taskObj.task)}</td>
         <td>${escapeHtml(taskObj.date)}</td>
-        <td><!-- status placeholder --></td>
+        <td>
+          <span class="status-text">${escapeHtml(taskObj.status)}</span>
+          <div class="status-actions" style="margin-top:6px;">
+            <button class="set-status" data-index="${index}" data-status="Done">Done</button>
+            <button class="set-status" data-index="${index}" data-status="Pending">Pending</button>
+          </div>
+        </td>
         <td><button class="delete-task" data-index="${index}">Delete</button></td>
       </tr>
     `;
@@ -85,6 +92,14 @@ function deleteTaskAt(index) {
   }
 }
 
+/// Set status for a task
+function setStatusAt(index, status) {
+  if (index >= 0 && index < tasksDb.length) {
+    tasksDb[index].status = status;
+    renderTasks();
+  }
+}
+
 /// Attach listeners and delegation
 document.addEventListener('DOMContentLoaded', () => {
   const addBtn = document.getElementById('Add-button');
@@ -99,10 +114,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (tbody) {
     tbody.addEventListener('click', (e) => {
+      // delete button
       const del = e.target.closest('.delete-task');
       if (del) {
         const idx = Number(del.getAttribute('data-index'));
         deleteTaskAt(idx);
+        return;
+      }
+
+      // status buttons (Done / Pending)
+      const statusBtn = e.target.closest('.set-status');
+      if (statusBtn) {
+        const idx = Number(statusBtn.getAttribute('data-index'));
+        const status = statusBtn.getAttribute('data-status');
+        setStatusAt(idx, status);
       }
     });
   }

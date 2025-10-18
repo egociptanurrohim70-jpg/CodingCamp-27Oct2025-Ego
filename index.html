@@ -7,20 +7,17 @@
     <!-- CSS External File -->
     <link rel="stylesheet" href="/css/style.css" />
 </head>
-<body>
+<body class="Full-Body">
     <!-- Header Section -->
     <h1 class="Header-text">Todo List</h1>
 
     <main>
-      <!-- Main Content Section -->
-      <input type="text" id="Input-Text" placeholder="add a todo..." />
-      <input type="date" id="Input-Date" />
-      <!-- Button Section -->
-      <button id="Add-button">+</button>
-      <br />
-      <button id="Filter-button">FILTER</button>
-      <button id="Delete-button">Delete All</button>
-      <br />
+      <!-- Button Section (kept outside table for global actions) -->
+      <div class="top-actions">
+        <button id="Filter-button">FILTER</button>
+        <button id="Delete-button">Delete All</button>
+      </div>
+
       <!-- Table Section -->
       <table border="0" id="Main-table">
         <thead>
@@ -31,11 +28,30 @@
             <th id="Table-Action">ACTION</th>
           </tr>
         </thead>
+
         <tbody>
           <tr>
             <td id="No-Task" colspan="4">No task found</td>
           </tr>
         </tbody>
+
+        <!-- Input row aligned with the headers. Kept in tfoot so renderTasks() can safely replace tbody content. -->
+        <tfoot>
+          <tr>
+            <td>
+              <input type="text" id="Input-Text" placeholder="add a todo..." />
+            </td>
+            <td>
+              <input type="date" id="Input-Date" />
+            </td>
+            <td>
+              <!-- could put a status filter or selector here later -->
+            </td>
+            <td>
+              <button id="Add-button">+</button>
+            </td>
+          </tr>
+        </tfoot>
       </table>
     </main>
 
