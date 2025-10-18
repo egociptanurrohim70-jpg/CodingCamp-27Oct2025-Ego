@@ -1,4 +1,3 @@
-
 let tasksDb = [];
 let currentFilterStatus = 'All';
 let currentFilterText = '';
@@ -46,13 +45,10 @@ function renderTasks() {
   const tbody = document.querySelector('#Main-table tbody');
   if (!tbody) return;
 
-  
   const filtered = tasksDb.filter(taskObj => {
-   
     if (currentFilterStatus && currentFilterStatus !== 'All') {
       if (taskObj.status !== currentFilterStatus) return false;
     }
-   
     if (currentFilterText) {
       if (!taskObj.task.toLowerCase().includes(currentFilterText.toLowerCase())) return false;
     }
@@ -68,10 +64,8 @@ function renderTasks() {
     return;
   }
 
-  
   let html = '';
   filtered.forEach((taskObj, index) => {
-    
     const status = taskObj.status;
     let bgColor = '#ffc107';
     let textColor = '#000';
@@ -119,7 +113,6 @@ function setStatusAt(index, status) {
   }
 }
 
-
 function applyFilterFromUI() {
   const statusEl = document.getElementById('Filter-Status'); 
   const textEl = document.getElementById('Filter-Text'); 
@@ -156,7 +149,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (addBtn) addBtn.addEventListener('click', addTask);
   if (deleteAllBtn) deleteAllBtn.addEventListener('click', () => {
-    
     if (confirm('Delete all tasks?')) Deletebutton();
   });
 
@@ -164,7 +156,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (clearFilterBtn) clearFilterBtn.addEventListener('click', clearFilters);
 
-  
   if (statusSelect) statusSelect.addEventListener('change', applyFilterFromUI);
   if (textInput) textInput.addEventListener('input', applyFilterFromUI);
 
@@ -178,7 +169,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-   
       const statusBtn = e.target.closest('.set-status');
       if (statusBtn) {
         const idx = Number(statusBtn.getAttribute('data-index'));
@@ -187,7 +177,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
-
 
   applyFilterFromUI();
 });
