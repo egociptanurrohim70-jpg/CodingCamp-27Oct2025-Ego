@@ -1,6 +1,6 @@
 .Full-Body 
 {
-background-color: rgb(11, 9, 129);
+background-color: rgb(4, 11, 54);
 color: white;
 font-family: 'Times New Roman', Times, serif;
 
@@ -55,9 +55,19 @@ font-family: 'Times New Roman', Times, serif;
 
 
 button.delete-task {
+  background-color: red;
+  color: white;
   padding: 4px 8px;
   cursor: pointer;
   position: relative;
+}
+#Add-button {
+  background-color: rgb(255, 255, 255);
+  color: rgb(0, 0, 0);
+  border-color: rgb(0, 0, 0);
+  border-radius: 6px;
+  border-style: solid;
+
 }
 
 @media (max-width: 480px) {
