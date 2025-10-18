@@ -58,7 +58,7 @@ function renderTasks() {
 
   // build rows
   let html = '';
-  tasksDb.forEach((taskObj, index) => {
+tasksDb.forEach((taskObj, index) => {
     html += `
       <tr data-index="${index}">
         <td>${escapeHtml(taskObj.task)}</td>
@@ -66,7 +66,11 @@ function renderTasks() {
         <td>
           <span class="status-text">${escapeHtml(taskObj.status)}</span>
           <div class="status-actions" style="margin-top:6px;">
+<<<<<<< HEAD
             <button class="set-status" data-index="${index}" data-status="Done" style="background-color:#28a745;color:#fff;border:none;padding:4px 8px;border-radius:4px;">Done </button>
+=======
+            <button class="set-status" data-index="${index}" data-status="Done" style="background-color:#28a745;color:#fff;border:none;padding:4px 8px;border-radius:4px;">Done</button>
+>>>>>>> 4a0183e4272aca06bb6396fd2baf628fbf6962ac
             <button class="set-status" data-index="${index}" data-status="Pending" style="background-color:#ffc107;color:#000;border:none;padding:4px 8px;border-radius:4px;margin-left:6px;">Pending</button>
           </div>
         </td>
