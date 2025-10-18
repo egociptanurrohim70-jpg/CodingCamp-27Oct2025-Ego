@@ -1,5 +1,7 @@
-/// Database Simulation
+
 let tasksDb = [];
+let currentFilterStatus = 'All';
+let currentFilterText = '';
 
 function escapeHtml(text) {
   const map = {
@@ -20,7 +22,6 @@ function validateInput(task, date) {
   return true;
 }
 
-/// Add Functionality
 function addTask() {
   const taskInput = document.getElementById('Input-Text');
   const taskDate = document.getElementById('Input-Date');
@@ -30,24 +31,35 @@ function addTask() {
   const newTask = {
     task: taskInput.value.trim(),
     date: taskDate.value,
-    status: 'Pending' // new: default status
+    status: 'Pending' 
   };
 
   tasksDb.push(newTask);
 
-  // clear inputs
   taskInput.value = '';
   taskDate.value = '';
 
   renderTasks();
 }
 
-/// Render Functionality (renders proper table rows)
 function renderTasks() {
   const tbody = document.querySelector('#Main-table tbody');
   if (!tbody) return;
 
-  if (tasksDb.length === 0) {
+  
+  const filtered = tasksDb.filter(taskObj => {
+   
+    if (currentFilterStatus && currentFilterStatus !== 'All') {
+      if (taskObj.status !== currentFilterStatus) return false;
+    }
+   
+    if (currentFilterText) {
+      if (!taskObj.task.toLowerCase().includes(currentFilterText.toLowerCase())) return false;
+    }
+    return true;
+  });
+
+  if (filtered.length === 0) {
     tbody.innerHTML = `
       <tr>
         <td id="No-Task" colspan="4">No task found</td>
@@ -56,17 +68,27 @@ function renderTasks() {
     return;
   }
 
-  // build rows
+  
   let html = '';
-  tasksDb.forEach((taskObj, index) => {
+  filtered.forEach((taskObj, index) => {
+    
+    const status = taskObj.status;
+    let bgColor = '#ffc107';
+    let textColor = '#000';
+    if (status === 'Done') {
+      bgColor = '#28a745'; 
+      textColor = '#fff';
+    }
+    const statusStyle = `style="background-color:${bgColor}; color:${textColor}; padding:4px 8px; border-radius:4px; display:inline-block;"`;
+
     html += `
       <tr data-index="${index}">
         <td>${escapeHtml(taskObj.task)}</td>
         <td>${escapeHtml(taskObj.date)}</td>
         <td>
-          <span class="status-text">${escapeHtml(taskObj.status)}</span>
+          <span class="status-text" ${statusStyle}>${escapeHtml(status)}</span>
           <div class="status-actions" style="margin-top:6px;">
-            <button class="set-status" data-index="${index}" data-status="Done" style="background-color:#28a745;color:#fff;border:none;padding:4px 8px;border-radius:4px;">Done </button>
+            <button class="set-status" data-index="${index}" data-status="Done" style="background-color:#28a745;color:#fff;border:none;padding:4px 8px;border-radius:4px;">Done</button>
             <button class="set-status" data-index="${index}" data-status="Pending" style="background-color:#ffc107;color:#000;border:none;padding:4px 8px;border-radius:4px;margin-left:6px;">Pending</button>
           </div>
         </td>
@@ -78,13 +100,11 @@ function renderTasks() {
   tbody.innerHTML = html;
 }
 
-/// Delete All Functionality
 function Deletebutton() {
   tasksDb = [];
   renderTasks();
 }
 
-/// Delete single task
 function deleteTaskAt(index) {
   if (index >= 0 && index < tasksDb.length) {
     tasksDb.splice(index, 1);
@@ -92,7 +112,6 @@ function deleteTaskAt(index) {
   }
 }
 
-/// Set status for a task
 function setStatusAt(index, status) {
   if (index >= 0 && index < tasksDb.length) {
     tasksDb[index].status = status;
@@ -100,17 +119,54 @@ function setStatusAt(index, status) {
   }
 }
 
-/// Attach listeners and delegation
+
+function applyFilterFromUI() {
+  const statusEl = document.getElementById('Filter-Status'); 
+  const textEl = document.getElementById('Filter-Text'); 
+
+  currentFilterStatus = statusEl ? statusEl.value : 'All';
+  currentFilterText = textEl ? textEl.value.trim() : '';
+
+  renderTasks();
+}
+
+function clearFilters() {
+  const statusEl = document.getElementById('Filter-Status');
+  const textEl = document.getElementById('Filter-Text');
+
+  if (statusEl) statusEl.value = 'All';
+  if (textEl) textEl.value = '';
+
+  currentFilterStatus = 'All';
+  currentFilterText = '';
+
+  renderTasks();
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const addBtn = document.getElementById('Add-button');
   const deleteAllBtn = document.getElementById('Delete-button');
   const tbody = document.querySelector('#Main-table tbody');
 
+  // filter UI elements (if present)
+  const filterBtn = document.getElementById('Filter-button');
+  const clearFilterBtn = document.getElementById('Clear-Filter');
+  const statusSelect = document.getElementById('Filter-Status');
+  const textInput = document.getElementById('Filter-Text');
+
   if (addBtn) addBtn.addEventListener('click', addTask);
   if (deleteAllBtn) deleteAllBtn.addEventListener('click', () => {
-    // confirm then delete all
+    
     if (confirm('Delete all tasks?')) Deletebutton();
   });
+
+  if (filterBtn) filterBtn.addEventListener('click', applyFilterFromUI);
+
+  if (clearFilterBtn) clearFilterBtn.addEventListener('click', clearFilters);
+
+  
+  if (statusSelect) statusSelect.addEventListener('change', applyFilterFromUI);
+  if (textInput) textInput.addEventListener('input', applyFilterFromUI);
 
   if (tbody) {
     tbody.addEventListener('click', (e) => {
@@ -122,7 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      // status buttons (Done / Pending)
+   
       const statusBtn = e.target.closest('.set-status');
       if (statusBtn) {
         const idx = Number(statusBtn.getAttribute('data-index'));
@@ -131,4 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
+
+
+  applyFilterFromUI();
 });
