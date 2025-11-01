@@ -88,8 +88,8 @@ function renderTasks() {
         <td>
           <span class="status-text" ${statusStyle}>${escapeHtml(status)}</span>
           <div class="status-actions" style="margin-top:6px;">
-            <button class="set-status" data-index="${index}" data-status="Done" style="background-color:#F76E2F;color:#fff;border:none;padding:4px 8px;border-radius:4px;">Done</button>
-            <button class="set-status" data-index="${index}" data-status="Pending" style="background-color:#F76E2F;color:#fff;border:none;padding:4px 8px;border-radius:4px;margin-left:6px;">Pending</button>
+            <button class="set-status" data-index="${index}" data-status="Done" style="background-color:#00FF00;color:#fff;border:none;padding:4px 8px;border-radius:4px;">Done</button>
+            <button class="set-status" data-index="${index}" data-status="Pending" style="background-color:#F0DB4F;color:#fff;border:none;padding:4px 8px;border-radius:4px;margin-left:6px;">Pending</button>
           </div>
         </td>
         <td><button class="delete-task" data-index="${index}" style="background-color:#ff0000;color:#fff;border:none;padding:4px 8px;border-radius:4px">Delete</button></td>
