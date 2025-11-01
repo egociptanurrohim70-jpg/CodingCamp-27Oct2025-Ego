@@ -7,8 +7,9 @@ font-family: 'Times New Roman', Times, serif;
 }
 
 .Header-text {
+  display: flex;
   text-align: center;
-  margin: 20px 80px ;
+  margin: 20px 95px ;
   font-size: 2rem;
   border: solid;
   border-color: black;
